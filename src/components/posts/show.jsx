@@ -58,6 +58,9 @@ export default class Layout extends Component {
   }
 
   componentDidMount(){
+    this.$$('.some-link').on('taphold', function (f7) {
+      f7.dialog.alert('Tap hold fired!');
+    });
     MyActions.getInstance('posts', this.$f7route.params['postId'], this.state.token);
     MyActions.getList('channels', this.state.page, {} ,this.state.token);
   }

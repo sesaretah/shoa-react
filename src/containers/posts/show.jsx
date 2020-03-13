@@ -1,5 +1,5 @@
 import React from "react";
-import { Page, Navbar, List, BlockTitle, ListItem, Fab, Icon, Preloader, Block, Row, Col, Button } from 'framework7-react';
+import {List, BlockTitle, ListItem, Block, Row, Col, Button } from 'framework7-react';
 import { stateToHTML } from "draft-js-export-html";
 import { EditorState, convertFromRaw } from "draft-js";
 import { Editor } from 'react-draft-wysiwyg';
@@ -34,8 +34,9 @@ const PostShow = (props) => {
 
         <BlockTitle>{dict.content}</BlockTitle>
         <Editor editorState={editorState}
-          toolbar={{ options: [], inline: { options: [] } }}
-          readOnly={true} />
+          toolbar={{ options: [] }}
+          readOnly={true} 
+          />
 
         <CommentForm post={props.post} submit={props.submitComment} handleChange={props.handleChange} />
         <CommentList comments={props.comments}/>

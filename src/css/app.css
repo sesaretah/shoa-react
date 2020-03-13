@@ -325,6 +325,17 @@ li.media-item .item-media img {
 .mb-20 {
   margin-bottom: 20px;
 }
+.jc-center {
+  justify-content: center !important;
+}
+
+.ta-center {
+  text-align: center !important;
+}
+.white {
+  color: white;
+}
+
 
 .profile-card {
   position: absolute;

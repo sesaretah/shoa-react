@@ -142,5 +142,8 @@ export const dict = {
   'choose_image': 'انتخاب عکس',
   'logout': 'خروج',
   'more': 'بیشتر ...',
-  'social': 'اجتماعی'
+  'social': 'اجتماعی',
+  'others': 'دیگران',
+  'related' : 'مرتبط',
+  'mine': 'من'
 };

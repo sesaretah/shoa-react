@@ -1,18 +1,16 @@
 import React from "react";
-import { Card, CardHeader, BlockTitle, Link, CardFooter, CardContent, Row, Col, Menu, MenuItem, MenuDropdown, Icon, MenuDropdownItem } from 'framework7-react';
+import { Card, CardHeader, Link, CardContent, Row, Col} from 'framework7-react';
 import crypto from 'crypto-js';
 import InteractionMenu from "../interactions/menu"
 import { dict } from "../../Dict";
 
-
 const PostList = (props) => {
-
   if (props.posts && props.posts.length > 0) {
     return (
       <React.Fragment>
         <Row noGap>
           {props.posts.map((post) =>
-            <Col width="100" tabletWidth="33">
+            <Col width="100" tabletWidth="33" key={crypto.lib.WordArray.random(128/8)}> 
               <Card className="demo-facebook-card">
                 <CardHeader className="no-border">
                   <div className="demo-facebook-avatar"><img src={post.profile.avatar} height="34" /></div>

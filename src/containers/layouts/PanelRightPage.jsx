@@ -29,17 +29,17 @@ export default class PanelRightPage extends Component {
           </List>
           <BlockTitle> <i className="va ml-5 fa fa-users"></i>{dict.social}</BlockTitle>
           <List>
-            <ListItem link="/posts/" view="#main-view" panelClose>
+            <ListItem link="/posts/" ignoreCache={true} reloadCurrent={true} view="#main-view" panelClose>
               <i className="va ml-5 fa fa-pencil"></i>
               <span>{dict.posts}</span>
             </ListItem>
             
-            <ListItem link="/channels/" view="#main-view" panelClose>
+            <ListItem link="/channels/" ignoreCache={true} reloadCurrent={true} view="#main-view" panelClose>
             <i className="va ml-5 fa fa-bullhorn"></i>
               <span>{dict.channels}</span>
             </ListItem>
             
-            <ListItem link="/profiles/"  view="#main-view" panelClose>
+            <ListItem link="/profiles/" ignoreCache={true} reloadCurrent={true} view="#main-view" panelClose>
               <i className="va ml-5 fa fa-user-circle-o"></i>
               <span>{dict.profiles}</span>
             </ListItem>
@@ -73,7 +73,7 @@ export default class PanelRightPage extends Component {
     const { token } = this.state;
     return (
       <Page >
-        <Navbar title={dict.Shoa} />
+        <Navbar ><span className='jc-center white'><i className="va ml-5 fa fa-umbrella"></i>{dict.Shoa}</span></Navbar>
         {this.logged_in(token)}
       </Page>
     );

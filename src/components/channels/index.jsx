@@ -16,11 +16,13 @@ export default class Channel extends React.Component {
     this.interaction = this.interaction.bind(this);
     this.setInstance = this.setInstance.bind(this);
     this.search = this.search.bind(this);
+    this.loadMore = this.loadMore.bind(this);
 
     this.state = {
       token: window.localStorage.getItem('token'),
-      channels: null,
+      channels: [],
       query: null,
+      page: 1,
     }
   }
   componentWillMount() {
@@ -40,8 +42,6 @@ export default class Channel extends React.Component {
   }
 
   loadData(){
-    //const f7: Framework7 = Framework7.instance;
-    //f7.toast.show({ text: dict.receiving, closeTimeout: 1000, position: 'top'});
     MyActions.getList('channels', this.state.page, {} , this.state.token);
   }
 
@@ -55,18 +55,32 @@ export default class Channel extends React.Component {
   }
 
   search(obj) {
+    this.setState({ channels: [], page: 1 });
     this.setState(obj, () => {
       MyActions.getList('channels/search', this.state.page, { q: this.state.query });
     });
+
   }
 
+  loadMore() {
+    if (this.state.query && this.state.query.length > 0) {
+      this.setState({ page: this.state.page + 1 }, () => {
+        MyActions.getList('channels/search', this.state.page, {q: this.state.query }, this.state.token);
+      });
+    } else {
+      this.setState({ page: this.state.page + 1 }, () => {
+        MyActions.getList('channels', this.state.page, {}, this.state.token);
+      });
+    }
+
+  }
 
   getList() {
     var channels = ModelStore.getList()
     var klass = ModelStore.getKlass()
-    if (channels && klass === 'Channel'){
+    if (channels.length > 0 && klass === 'Channel') {
       this.setState({
-        channels: channels,
+        channels: this.state.channels.concat(channels),
       });
     }
   }
@@ -78,6 +92,6 @@ export default class Channel extends React.Component {
 
   render() {
     const {channels} = this.state;
-    return(<ChannelIndex interaction={this.interaction} search={this.search} channels={channels}/>)
+    return(<ChannelIndex interaction={this.interaction} search={this.search} loadMore={this.loadMore} channels={channels}/>)
   }
 }

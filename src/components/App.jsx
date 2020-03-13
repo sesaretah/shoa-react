@@ -30,6 +30,9 @@ export default function (props) {
     panel: {
       rightBreakpoint: 960,
     },
+    touch: {
+      tapHold: true //enable tap hold events
+    },
     view: {
       //ignoreCache: true,
       //reloadCurrent: true

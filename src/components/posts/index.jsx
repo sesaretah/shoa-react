@@ -3,8 +3,6 @@ import { Page, Fab, Icon } from 'framework7-react';
 import ModelStore from "../../stores/ModelStore";
 import PostIndex from "../../containers/posts/index"
 import * as MyActions from "../../actions/MyActions";
-import { dict } from '../../Dict';
-import Framework7 from 'framework7/framework7.esm.bundle';
 import { loggedIn } from "../../components/users/loggedIn.js"
 
 
@@ -37,6 +35,9 @@ export default class Post extends React.Component {
   }
 
   componentDidMount() {
+    this.$$('.some-link').on('taphold', function (f7) {
+      f7.dialog.alert('Tap hold fired!');
+    });
     this.loggedIn();
     this.loadData();
   }
@@ -46,7 +47,7 @@ export default class Post extends React.Component {
   }
 
   search(obj) {
-    this.setState({ posts: [] });
+    this.setState({ posts: [], page: 1 });
     this.setState(obj, () => {
       MyActions.getList('posts/search', this.state.page, { q: this.state.query });
     });
@@ -54,9 +55,16 @@ export default class Post extends React.Component {
   }
 
   loadMore() {
-    this.setState({ page: this.state.page + 1 }, () => {
-      MyActions.getList('posts', this.state.page, {}, this.state.token);
-    });
+    if (this.state.query && this.state.query.length > 0) {
+      this.setState({ page: this.state.page + 1 }, () => {
+        MyActions.getList('posts/search', this.state.page, {q: this.state.query }, this.state.token);
+      });
+    } else {
+      this.setState({ page: this.state.page + 1 }, () => {
+        MyActions.getList('posts', this.state.page, {}, this.state.token);
+      });
+    }
+
   }
 
 
@@ -74,11 +82,6 @@ export default class Post extends React.Component {
     if (posts.length > 0 && klass === 'Post') {
       this.setState({
         posts: this.state.posts.concat(posts),
-      });
-    }
-    if (posts.length == 0 && klass === 'Post') {
-      this.setState({
-        page: 1,
       });
     }
   }

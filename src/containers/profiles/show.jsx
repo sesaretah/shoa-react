@@ -1,10 +1,11 @@
 import React from "react";
-import { Card, Chip, CardContent, CardHeader, Col, Row } from 'framework7-react';
+import { Card, Chip, CardContent, CardHeader, Col, Row, Tab, Tabs, Icon } from 'framework7-react';
 import { dict } from '../../Dict';
 import ActualForm from "../actuals/form";
 import ActualList from "../actuals/list";
 import { Chart } from 'react-charts'
 import { color } from "d3";
+import ChannelCompactList from "../channels/compactlist"
 
 const ProfileShow = (props) => {
   const data = React.useMemo(
@@ -31,47 +32,101 @@ const ProfileShow = (props) => {
 
   if (props.profile) {
     return (
-      <React.Fragment>
-        <Card>
-          <CardHeader>
-            <img src={props.profile.avatar} width="80"></img>
-            <div className='profile-card'>{props.profile.fullname}</div>
-          </CardHeader>
-          <CardContent>
-            <Chip text="Example Chip" />
-            <Chip text="Another Chip" />
-          </CardContent>
-        </Card>
-        <Row noGap>
-          <Col></Col>
-          <Col>
-            <Card>
-              <div
-                style={{
-                  display: 'inline-block',
-                  borderRadius: '5px',
-                  padding: '10px',
-                  marginRight: '10px',
-                  backgroundColor: 'white',
-                  width: '200px',
-                  height: '200px'
-                }}
-              >
-                <Chart data={data} axes={axes} />
+
+      <Tabs>
+        <Tab id="tab-1" className="page-content" tabActive>
+          <Row>
+            <Col width="100" tabletWidth="50">
+
+              <Card>
+                <CardHeader>
+                  <img src={props.profile.avatar} width="80"></img>
+                  <div className='profile-card'>{props.profile.fullname}</div>
+                </CardHeader>
+                <CardContent>
+                  <Chip text="Example Chip" />
+                  <Chip text="Another Chip" />
+                  <a onClick={props.addTag}>
+                    <Chip text="Add Contact" mediaBgColor="blue">
+                      <Icon slot="media" aurora="fa:plus-circle"></Icon>
+                    </Chip>
+                  </a>
+
+                </CardContent>
+              </Card>
+              <ChannelCompactList channels={props.channels} />
+            </Col>
+
+            <Col width="100" tabletWidth="50">
+              {props.metas.map((m) =>
+                <React.Fragment>
+                  <ActualList meta={m.meta} editable={false} actuals={m.actuals} removeActual={props.removeActual} />
+                </React.Fragment>
+              )}
+            </Col>
+          </Row>
+
+        </Tab>
+        <Tab id="tab-2" className="page-content">
+          <Row noGap>
+            <Col width="100" tabletWidth="50">
+              <Card>
+                <CardHeader>Chart</CardHeader>
+                <CardContent className='ta-center'>
+                  <div
+                    style={{
+                      display: 'inline-block',
+                      borderRadius: '5px',
+                      padding: '10px',
+                      marginRight: '10px',
+                      backgroundColor: 'white',
+                      width: '250px',
+                      height: '200px'
+                    }}
+                  >
+                    <Chart data={data} axes={axes} />
+                  </div>
+                </CardContent>
+              </Card>
+            </Col>
+          </Row>
+        </Tab>
+
+        <Tab id="tab-3" className="page-content">
+          <div className="block-title">Only Tablet Side By Side</div>
+          <Row>
+            <Col width="100" tabletWidth="100">
+              <div className="timeline timeline-sides">
+                <div className="timeline-item">
+                  <div className="timeline-item-date">21 <small>DEC</small></div>
+                  <div className="timeline-item-divider"></div>
+                  <div className="timeline-item-content">
+                    <div className="timeline-item-inner">
+                      <div className="timeline-item-time">12:30</div>
+                      <div className="timeline-item-title">Title</div>
+                      <div className="timeline-item-subtitle">Subtitle</div>
+                      <div className="timeline-item-text">Text</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="timeline-item">
+                  <div className="timeline-item-date">21 <small>DEC</small></div>
+                  <div className="timeline-item-divider"></div>
+                  <div className="timeline-item-content">
+                    <div className="timeline-item-inner">
+                      <div className="timeline-item-time">12:30</div>
+                      <div className="timeline-item-title">Title</div>
+                      <div className="timeline-item-subtitle">Subtitle</div>
+                      <div className="timeline-item-text">Text</div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </Card>
-          </Col>
-        </Row>
+            </Col>
+          </Row>
+        </Tab>
+      </Tabs>
 
-
-
-        {props.metas.map((m) =>
-          <React.Fragment>
-            <ActualList meta={m.meta} editable={false} actuals={m.actuals} removeActual={props.removeActual} />
-          </React.Fragment>
-        )}
-
-      </React.Fragment>
     )
   } else {
     return (null)
