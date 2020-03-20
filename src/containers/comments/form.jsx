@@ -13,6 +13,7 @@ const CommentForm = (props) => {
             placeholder='...'
             maxlength='300'
             resizable
+            clearButton={true}
             onInput={(e) => {
               props.handleChange({ commentContent: e.target.value})
             }}

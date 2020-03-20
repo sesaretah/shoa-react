@@ -145,5 +145,11 @@ export const dict = {
   'social': 'اجتماعی',
   'others': 'دیگران',
   'related' : 'مرتبط',
-  'mine': 'من'
+  'mine': 'من',
+  'info':'اطلاعات',
+  'admins': 'مدیران',
+  'recent_posts': 'پست های اخیر',
+  'profile_info':'اطلاعات فردی ',
+  'experties': 'تخصص ها و مهارت ها',
+  'new_experties': 'افزودن تخصص'
 };

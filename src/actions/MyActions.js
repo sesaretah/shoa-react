@@ -40,8 +40,8 @@ export function fileUpload(model, id , file, token){
   });
 }
 
-export function getInstance(model, id, token) {
-  axios.get(server + '/'+ model +'/'+id, { headers: {'Content-Type': 'application/json', 'Authorization': "bearer " + token } })
+export function getInstance(model, id, token, page=1) {
+  axios.get(server + '/'+ model +'/'+id+'?page='+page, { headers: {'Content-Type': 'application/json', 'Authorization': "bearer " + token } })
   .then(function (response) {
     dispatcher.dispatch({
       type: "GET_INSTANCE_SUCCESS",

@@ -17,13 +17,13 @@ const PostShow = (props) => {
     return (
       <React.Fragment>
         <Block>
-          <Row noGap>
-            <Col width='80'></Col>
-            <Col width="10">
-              <Button><ShareMenu model={props.post} submit={props.submit} channels={props.channels} klass='Post' sheetOpened={props.sheetOpened} handleChange={props.handleChange} klass='Channel' interaction={props.interaction} /></Button>
+          <Row>
+            <Col width='50' tabletWidth='70'></Col>
+            <Col width="25" tabletWidth='15' className='ml-5'>
+              <Button fill><ShareMenu model={props.post} submit={props.submit} channels={props.channels} klass='Post' sheetOpened={props.sheetOpened} handleChange={props.handleChange} klass='Channel' interaction={props.interaction} /></Button>
             </Col>
-            <Col width="10">
-              <Button><InteractionMenu model={props.post} klass='Post' interaction={props.interaction} /></Button>
+            <Col width="25" tabletWidth='15'>
+              <Button fill><InteractionMenu model={props.post} klass='Post' interaction={props.interaction} /></Button>
             </Col>
           </Row>
         </Block>
@@ -39,7 +39,7 @@ const PostShow = (props) => {
           />
 
         <CommentForm post={props.post} submit={props.submitComment} handleChange={props.handleChange} />
-        <CommentList comments={props.comments}/>
+        <CommentList comments={props.comments} removeComment={props.removeComment} loadMore={props.loadMore}/>
       </React.Fragment>
     )
   } else {

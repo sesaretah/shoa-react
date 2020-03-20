@@ -13,7 +13,7 @@ const PostList = (props) => {
             <Col width="100" tabletWidth="33" key={crypto.lib.WordArray.random(128/8)}> 
               <Card className="demo-facebook-card">
                 <CardHeader className="no-border">
-                  <div className="demo-facebook-avatar"><img src={post.profile.avatar} height="34" /></div>
+                <div className="demo-facebook-avatar"><Link tooltip={post.profile.fullname} href={'/profiles/' + post.profile.id}><img src={post.profile.avatar} height="34" /></Link></div>
                   <div className="demo-facebook-name ">
                     <div className="demo-facebook-profile ">
                       <Link className="gray-color" href={'/profiles/' + post.profile.id}>{post.profile.fullname.substring(0, 40)}</Link>
@@ -23,8 +23,8 @@ const PostList = (props) => {
                     <InteractionMenu model={post} klass='Post' interaction={props.interaction} sourceType={props.sourceType} sourceId={props.sourceId} />
                   </div>
                 </CardHeader>
-                <CardContent className='lightgray-color'>
-                  {post.content.substring(0, 120) + '...'}
+                <CardContent className='lightgray-color fs-12'>
+                  {post.content.substring(0, 150) + '...'}
                   <div className="demo-facebook-more">
                     <Link className="gray-color" href={'/posts/' + post.id}>
                       {dict.view}

@@ -6,6 +6,7 @@ import ActualList from "../actuals/list";
 import { Chart } from 'react-charts'
 import { color } from "d3";
 import ChannelCompactList from "../channels/compactlist"
+import ExpertiesList from "./experties";
 
 const ProfileShow = (props) => {
   const data = React.useMemo(
@@ -44,14 +45,7 @@ const ProfileShow = (props) => {
                   <div className='profile-card'>{props.profile.fullname}</div>
                 </CardHeader>
                 <CardContent>
-                  <Chip text="Example Chip" />
-                  <Chip text="Another Chip" />
-                  <a onClick={props.addTag}>
-                    <Chip text="Add Contact" mediaBgColor="blue">
-                      <Icon slot="media" aurora="fa:plus-circle"></Icon>
-                    </Chip>
-                  </a>
-
+                  <ExpertiesList experties={props.profile.experties} />
                 </CardContent>
               </Card>
               <ChannelCompactList channels={props.channels} />

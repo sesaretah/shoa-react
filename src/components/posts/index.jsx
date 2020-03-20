@@ -35,9 +35,7 @@ export default class Post extends React.Component {
   }
 
   componentDidMount() {
-    this.$$('.some-link').on('taphold', function (f7) {
-      f7.dialog.alert('Tap hold fired!');
-    });
+
     this.loggedIn();
     this.loadData();
   }
@@ -64,7 +62,6 @@ export default class Post extends React.Component {
         MyActions.getList('posts', this.state.page, {}, this.state.token);
       });
     }
-
   }
 
 

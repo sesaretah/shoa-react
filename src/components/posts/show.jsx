@@ -29,12 +29,16 @@ export default class Layout extends Component {
     this.getList = this.getList.bind(this);
     this.submit = this.submit.bind(this);
     this.submitComment = this.submitComment.bind(this);
+    this.removeComment = this.removeComment.bind(this);
+    this.loadMore = this.loadMore.bind(this);
 
+    
     
 
     this.state = {
       post: null,
       id: null,
+      page: 1,
       channels: null,
       channel_id: null,
       sheetOpened: false,
@@ -49,12 +53,15 @@ export default class Layout extends Component {
     ModelStore.on("got_instance", this.getInstance);
     ModelStore.on("set_instance", this.setInstance);
     ModelStore.on("got_list", this.getList);
+    ModelStore.on("deleted_instance", this.getInstance);
+    
   }
 
   componentWillUnmount() {
     ModelStore.removeListener("got_instance", this.getInstance);
     ModelStore.removeListener("set_instance", this.setInstance);
     ModelStore.removeListener("got_list", this.getList);
+    ModelStore.removeListener("deleted_instance", this.getInstance);
   }
 
   componentDidMount(){
@@ -94,9 +101,16 @@ export default class Layout extends Component {
     if(post && klass === 'Post'){
       this.setState({
         post: post,
-        comments: post.comments
+        comments: post.comments,
+        page: 1
       });
     }
+  }
+
+  loadMore() {
+    this.setState({ page: this.state.page + 1 }, () => {
+      MyActions.getInstance('posts', this.$f7route.params['postId'], this.state.token, this.state.page);
+    });
   }
 
   fab(){
@@ -132,6 +146,11 @@ export default class Layout extends Component {
     MyActions.setInstance('comments', data, this.state.token);
   }
 
+  removeComment(id){
+    var data = {id: id}
+    MyActions.removeInstance('comments', data, this.state.token, this.state.page);
+  }
+
   render() {
     const {post, sheetOpened, channels, comments} = this.state;
     return (
@@ -139,7 +158,7 @@ export default class Layout extends Component {
         <Navbar title={dict.posts} backLink={dict.back} />
         <BlockTitle></BlockTitle>
         {this.fab()}
-        <PostShow post={post} comments={comments} channels={channels} submitComment={this.submitComment} sheetOpened={sheetOpened} submit={this.submit} interaction={this.interaction} handleChange={this.handleChangeValue}/>
+        <PostShow post={post} comments={comments} channels={channels} submitComment={this.submitComment} removeComment={this.removeComment} submit={this.submit} interaction={this.interaction} handleChange={this.handleChangeValue} loadMore={this.loadMore}/>
       </Page>
     );
   }

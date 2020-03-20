@@ -10,7 +10,7 @@ const CommentList = (props) => {
     if (props.comments) {
 
         for (let i = 0; i < props.comments.length; i++) {
-            var time = <React.Fragment><Link><i className="va ml-5 fa fa-trash"></i></Link><Moment locale="fa" fromNow ago>{props.comments[i].created_at}</Moment>{dict.ago}</React.Fragment>
+            var time = <React.Fragment><Link onClick={() => props.removeComment(props.comments[i].id)}><i className="va ml-5 fa fa-trash"></i></Link><Moment locale="fa" fromNow ago>{props.comments[i].created_at}</Moment>{dict.ago}</React.Fragment>
             items.push(
                 <ListItem
                     className='some-link'

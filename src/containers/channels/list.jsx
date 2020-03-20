@@ -18,7 +18,7 @@ const ChannelList = (props) => {
                 <div className="demo-facebook-date"><InteractionMenu model={channel} klass='Channel' interaction={props.interaction} sourceType='Channel' sourceId={channel.id} /></div>
               </CardHeader>
               <CardContent className='lightgray-color'>
-                  {channel.content.substring(0, 120) + '...'}
+                  <span className='fs-12'>{channel.content.substring(0, 120) + '...'}</span>
                   <div className="demo-facebook-more">
                     <Link className="gray-color" href={'/channels/' + channel.id}>
                       {dict.view}

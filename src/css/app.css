@@ -67,7 +67,9 @@
 --f7-menu-dropdown-border-radius: var(--f7-menu-item-border-radius);
 */
   --f7-card-header-padding-vertical: 5px;
-  --f7-card-header-padding-horizontal: 5px;
+  --f7-card-header-padding-horizontal: 10px;
+  --f7-card-content-padding-horizontal:10px;
+  --f7-card-content-padding-vertical: 8px;
   --f7-menu-item-spacing: 2px;
 }
 
@@ -336,6 +338,10 @@ li.media-item .item-media img {
   color: white;
 }
 
+.fs-12 {
+  font-size: 12px !important;
+}
+
 
 .profile-card {
   position: absolute;
@@ -366,3 +372,9 @@ li.media-item .item-media img {
 }
 
 .pagination a:hover:not(.active) {background-color: #ddd;}
+
+.upload-btn {
+  width: 200px;
+  border-radius: 5px !important;
+}
+
