@@ -7,6 +7,9 @@ import { Chart } from 'react-charts'
 import { color } from "d3";
 import ChannelCompactList from "../channels/compactlist"
 import ExpertiesList from "./experties";
+import InteractionMenu from "../interactions/menu"
+import Followers from "./followers"
+import Followees from "./followees"
 
 const ProfileShow = (props) => {
   const data = React.useMemo(
@@ -43,20 +46,18 @@ const ProfileShow = (props) => {
                 <CardHeader>
                   <img src={props.profile.avatar} width="80"></img>
                   <div className='profile-card'>{props.profile.fullname}</div>
+                  <div className="demo-facebook-date"><InteractionMenu model={props.profile} klass='Profile' interaction={props.interaction} sourceType='Profile' sourceId={props.profile.id} /></div>
                 </CardHeader>
                 <CardContent>
                   <ExpertiesList experties={props.profile.experties} />
                 </CardContent>
               </Card>
-              <ChannelCompactList channels={props.channels} />
+              <Followers followers={props.profile.followers}/>
             </Col>
 
             <Col width="100" tabletWidth="50">
-              {props.metas.map((m) =>
-                <React.Fragment>
-                  <ActualList meta={m.meta} editable={false} actuals={m.actuals} removeActual={props.removeActual} />
-                </React.Fragment>
-              )}
+            <ChannelCompactList channels={props.channels} />
+            <Followees followees={props.profile.followees}/>
             </Col>
           </Row>
 
@@ -64,9 +65,7 @@ const ProfileShow = (props) => {
         <Tab id="tab-2" className="page-content">
           <Row noGap>
             <Col width="100" tabletWidth="50">
-              <Card>
-                <CardHeader>Chart</CardHeader>
-                <CardContent className='ta-center'>
+              {/*
                   <div
                     style={{
                       display: 'inline-block',
@@ -77,11 +76,15 @@ const ProfileShow = (props) => {
                       width: '250px',
                       height: '200px'
                     }}
-                  >
+                  > 
                     <Chart data={data} axes={axes} />
-                  </div>
-                </CardContent>
-              </Card>
+                    </div>
+                    */}
+              {props.metas.map((m) =>
+                <React.Fragment>
+                  <ActualList meta={m.meta} editable={false} actuals={m.actuals} removeActual={props.removeActual} />
+                </React.Fragment>
+              )}
             </Col>
           </Row>
         </Tab>
@@ -119,7 +122,7 @@ const ProfileShow = (props) => {
             </Col>
           </Row>
         </Tab>
-      </Tabs>
+      </Tabs >
 
     )
   } else {

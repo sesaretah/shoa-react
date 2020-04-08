@@ -13,7 +13,7 @@ import {
   Block,
   Icon, Fab
 } from 'framework7-react';
-import { dict} from '../../Dict';
+import { dict } from '../../Dict';
 import ModelStore from "../../stores/ModelStore";
 import * as MyActions from "../../actions/MyActions";
 import PostShow from "../../containers/posts/show";
@@ -32,15 +32,16 @@ export default class Layout extends Component {
     this.removeComment = this.removeComment.bind(this);
     this.loadMore = this.loadMore.bind(this);
 
-    
-    
+
+
 
     this.state = {
       post: null,
       id: null,
       page: 1,
       channels: null,
-      channel_id: null,
+      selectedChannel: null,
+      channelId: null,
       sheetOpened: false,
       commentContent: '',
       comments: null,
@@ -54,7 +55,7 @@ export default class Layout extends Component {
     ModelStore.on("set_instance", this.setInstance);
     ModelStore.on("got_list", this.getList);
     ModelStore.on("deleted_instance", this.getInstance);
-    
+
   }
 
   componentWillUnmount() {
@@ -64,18 +65,18 @@ export default class Layout extends Component {
     ModelStore.removeListener("deleted_instance", this.getInstance);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.$$('.some-link').on('taphold', function (f7) {
       f7.dialog.alert('Tap hold fired!');
     });
     MyActions.getInstance('posts', this.$f7route.params['postId'], this.state.token);
-    MyActions.getList('channels', this.state.page, {} ,this.state.token);
+    MyActions.getList('channels/my', this.state.page, {}, this.state.token);
   }
 
-  getInstance(){
+  getInstance() {
     var post = ModelStore.getIntance()
     var klass = ModelStore.getKlass()
-    if (post && klass === 'Post'){
+    if (post && klass === 'Post') {
       this.setState({
         post: post,
         id: post.id,
@@ -87,18 +88,19 @@ export default class Layout extends Component {
   getList() {
     var channels = ModelStore.getList()
     var klass = ModelStore.getKlass()
-    if (channels&& klass === 'Channel'){
+    if (channels && klass === 'Channel') {
       this.setState({
         channels: channels,
-        channel_id: channels[0].id
+        channelId: channels[0].id
       });
+    }
+    console.log(channels)
   }
-}
 
-  setInstance(){
+  setInstance() {
     var post = ModelStore.getIntance()
     var klass = ModelStore.getKlass()
-    if(post && klass === 'Post'){
+    if (post && klass === 'Post') {
       this.setState({
         post: post,
         comments: post.comments,
@@ -113,10 +115,10 @@ export default class Layout extends Component {
     });
   }
 
-  fab(){
-    if (this.state.post){
-      return(
-        <Fab href={"/posts/"+this.state.post.id+"/edit"} target="#main-view"  position="left-bottom" slot="fixed" color="lime">
+  fab() {
+    if (this.state.post) {
+      return (
+        <Fab href={"/posts/" + this.state.post.id + "/edit"} target="#main-view" position="left-bottom" slot="fixed" color="lime">
           <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
           <Icon ios="f7:close" aurora="f7:close" md="material:close"></Icon>
         </Fab>
@@ -129,36 +131,36 @@ export default class Layout extends Component {
   }
 
 
-  interaction(interaction_type, interactionable_id, interactionable_type, source_type=null, source_id=null){
-    var data = {interaction_type: interaction_type, interactionable_id: interactionable_id, interactionable_type: interactionable_type, source_type: source_type, source_id: source_id}
+  interaction(interaction_type, interactionable_id, interactionable_type, source_type = null, source_id = null) {
+    var data = { interaction_type: interaction_type, interactionable_id: interactionable_id, interactionable_type: interactionable_type, source_type: source_type, source_id: source_id }
     MyActions.setInstance('interactions', data, this.state.token);
   }
 
-  submit(){
-    var data = {post_id: this.state.id, channel_id: this.state.channel_id}
+  submit() {
+    var data = { post_id: this.state.id, channel_id: this.state.selectedChannel }
     MyActions.setInstance('shares', data, this.state.token);
     const self = this;
     self.$f7.sheet.close('.demo-sheet')
   }
 
-  submitComment(){
-    var data = {post_id: this.state.id, content: this.state.commentContent}
+  submitComment() {
+    var data = { post_id: this.state.id, content: this.state.commentContent }
     MyActions.setInstance('comments', data, this.state.token);
   }
 
-  removeComment(id){
-    var data = {id: id}
+  removeComment(id) {
+    var data = { id: id }
     MyActions.removeInstance('comments', data, this.state.token, this.state.page);
   }
 
   render() {
-    const {post, sheetOpened, channels, comments} = this.state;
+    const { post, sheetOpened, channels, comments } = this.state;
     return (
       <Page>
         <Navbar title={dict.posts} backLink={dict.back} />
         <BlockTitle></BlockTitle>
         {this.fab()}
-        <PostShow post={post} comments={comments} channels={channels} submitComment={this.submitComment} removeComment={this.removeComment} submit={this.submit} interaction={this.interaction} handleChange={this.handleChangeValue} loadMore={this.loadMore}/>
+        <PostShow post={post} comments={comments} channels={channels} submitComment={this.submitComment} removeComment={this.removeComment} submit={this.submit} interaction={this.interaction} handleChange={this.handleChangeValue} loadMore={this.loadMore} />
       </Page>
     );
   }

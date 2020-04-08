@@ -1,12 +1,12 @@
 import React from "react"
 import { Page, Fab, Icon } from 'framework7-react';
 import ModelStore from "../../stores/ModelStore";
-import PostIndex from "../../containers/posts/index"
+import NotificationIndex from "../../containers/notifications/index"
 import * as MyActions from "../../actions/MyActions";
 import { loggedIn } from "../../components/users/loggedIn.js"
 
 
-export default class Post extends React.Component {
+export default class Notification extends React.Component {
   constructor() {
     super();
     this.getList = this.getList.bind(this);
@@ -19,7 +19,7 @@ export default class Post extends React.Component {
 
     this.state = {
       token: window.localStorage.getItem('token'),
-      posts: [],
+      notifications: [],
       query: null,
       page: 1
     }
@@ -35,50 +35,54 @@ export default class Post extends React.Component {
   }
 
   componentDidMount() {
+
     this.loggedIn();
     this.loadData();
   }
 
   loadData() {
-    MyActions.getList('posts', this.state.page, {}, this.state.token);
+    MyActions.getList('notifications', this.state.page, {}, this.state.token);
   }
 
   search(obj) {
-    this.setState({ posts: [], page: 1 });
+    this.setState({ notifications: [], page: 1 });
     this.setState(obj, () => {
-      MyActions.getList('posts/search', this.state.page, { q: this.state.query });
+      MyActions.getList('notifications/search', this.state.page, { q: this.state.query });
     });
 
   }
 
-  setInstance() {
-    var post = ModelStore.getIntance()
-    if (post) {
-      this.setState({ posts: this.state.posts.map(el => (el.id === post.id ? Object.assign({}, el, post) : el)) });
+  loadMore() {
+    if (this.state.query && this.state.query.length > 0) {
+      this.setState({ page: this.state.page + 1 }, () => {
+        MyActions.getList('notifications/search', this.state.page, {q: this.state.query }, this.state.token);
+      });
+    } else {
+      this.setState({ page: this.state.page + 1 }, () => {
+        MyActions.getList('notifications', this.state.page, {}, this.state.token);
+      });
     }
   }
 
 
-  loadMore() {
-    if (this.state.query && this.state.query.length > 0) {
-      this.setState({ page: this.state.page + 1 }, () => {
-        MyActions.getList('posts/search', this.state.page, {q: this.state.query }, this.state.token);
-      });
-    } else {
-      this.setState({ page: this.state.page + 1 }, () => {
-        MyActions.getList('posts', this.state.page, {}, this.state.token);
-      });
+
+  setInstance() {
+    var notification = ModelStore.getIntance()
+    if (notification) {
+      this.setState({ notifications: this.state.notifications.map(el => (el.id === notification.id ? Object.assign({}, el, notification) : el)) });
     }
   }
 
   getList() {
-    var posts = ModelStore.getList()
+    var notifications = ModelStore.getList()
     var klass = ModelStore.getKlass()
-    if (posts.length > 0 && klass === 'Post') {
+    if (notifications.length > 0 && klass === 'Notification') {
       this.setState({
-        posts: this.state.posts.concat(posts),
+        notifications: this.state.notifications.concat(notifications),
       });
     }
+    var data = {}
+    MyActions.setInstance('notifications', data, this.state.token);
   }
 
   interaction(interaction_type, interactionable_id, interactionable_type, source_type = null, source_id = null) {
@@ -87,7 +91,7 @@ export default class Post extends React.Component {
   }
 
   render() {
-    const { posts } = this.state;
-    return (<PostIndex interaction={this.interaction} loadMore={this.loadMore} posts={posts} search={this.search} />)
+    const { notifications } = this.state;
+    return (<NotificationIndex interaction={this.interaction} loadMore={this.loadMore} notifications={notifications} search={this.search} />)
   }
 }

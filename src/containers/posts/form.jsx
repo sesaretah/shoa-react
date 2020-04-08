@@ -30,14 +30,14 @@ const PostForm = (props) => {
     return (
       <React.Fragment>
         <Card>
-          <CardHeader>{dict.post}</CardHeader>
+          <CardHeader>{dict.new_post}</CardHeader>
           <List form>
             {channels}
             <ListInput
-              label={dict.title}
+              label={dict.title + '*'}
               type="text"
               placeholder='...'
-              maxlength='50'
+              maxlength='65'
               value={props.post.title}
               onInput={(e) => {
                 props.handleChange({ title: e.target.value })

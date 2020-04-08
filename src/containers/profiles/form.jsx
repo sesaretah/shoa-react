@@ -7,7 +7,6 @@ import ActualList from "../actuals/list";
 import ExpertiesList from "./experties";
 import ImageUploader from 'react-images-upload';
 const ProfileForm = (props) => {
-  console.log(props)
   if (props.name && props.metas) {
     return (
       <React.Fragment>

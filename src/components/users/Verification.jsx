@@ -16,7 +16,7 @@ import {
   Button, Icon, Fab,Searchbar, Subnavbar, LoginScreenTitle, ListInput, ListButton, BlockFooter
 } from 'framework7-react';
 import { dict} from '../../Dict';
-import LoginForm from "../../containers/users/Login"
+import VerificationForm from "../../containers/users/Verification"
 import ModelStore from "../../stores/ModelStore";
 import * as MyActions from "../../actions/MyActions";
 import Framework7 from 'framework7/framework7.esm.bundle';
@@ -29,8 +29,7 @@ export default class extends React.Component {
     this.setInstance = this.setInstance.bind(this);
 
     this.state = {
-      email: '',
-      password: '',
+      verificationCode: '',
     };
   }
 
@@ -41,24 +40,19 @@ export default class extends React.Component {
   componentWillUnmount() {
     ModelStore.removeListener("set_instance", this.setInstance);
   }
-  componentDidMount(){
-    const self = this;
-    self.$$('input').focusin()
-    console.log(self.$$('input')[0])
-  }
 
   submit(){
-    var data = {email: this.state.email, password: this.state.password}
-    MyActions.setInstance('users/login', data);
+    var data = {verification_code: this.state.verificationCode}
+    MyActions.setInstance('users/verify', data);
   }
 
   setInstance(){
     var user = ModelStore.getIntance();
     if (user){
-     // window.localStorage.setItem('token', user.token);
+      window.localStorage.setItem('token', user.token);
     }
     const self = this;
-    this.$f7router.navigate('/verification/');
+    this.$f7router.navigate('/');
     window.location.reload()
   }
 
@@ -70,7 +64,7 @@ export default class extends React.Component {
   render() {
     const {username, password} = this.state;
     return (
-      <LoginForm submit={this.submit} handleChange={this.handleChangeValue}/>
+      <VerificationForm submit={this.submit} handleChange={this.handleChangeValue}/>
     )
   }
 

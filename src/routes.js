@@ -14,6 +14,8 @@ import PostIndex from './components/posts/index';
 import PostCreate from './components/posts/create';
 import PostUpdate from './components/posts/update';
 
+import NotificationIndex from './components/notifications/index';
+
 import ChannelShow from './components/channels/show';
 import ChannelIndex from './components/channels/index';
 import ChannelCreate from './components/channels/create';
@@ -33,6 +35,7 @@ import ProfileUpdate from './components/profiles/update';
 
 import Login from './components/users/Login';
 import SignUp from './components/users/SignUp';
+import Verification from './components/users/Verification';
 
 
 
@@ -48,6 +51,10 @@ export default [
   {
     path: '/sign_up/',
     component: SignUp,
+  },
+  {
+    path: '/verification/',
+    component: Verification,
   },
   {
     path: '/panel-right/',
@@ -68,6 +75,11 @@ export default [
   {
     path: '/metas/:metaId',
     component: MetaShow,
+  },
+
+  {
+    path: '/notifications/',
+    component: NotificationIndex,
   },
 
   {

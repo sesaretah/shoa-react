@@ -36,7 +36,6 @@ export default class Channel extends React.Component {
   }
 
   componentDidMount(){
-    console.log('componentDidMount');
     this.loggedIn();
     this.loadData();
   }
@@ -45,6 +44,12 @@ export default class Channel extends React.Component {
     MyActions.getList('channels', this.state.page, {} , this.state.token);
   }
 
+  search(obj) {
+    this.setState({ channels: [], page: 1 });
+    this.setState(obj, () => {
+      MyActions.getList('channels/search', this.state.page, { q: this.state.query });
+    });
+  }
 
 
   setInstance(){
@@ -54,13 +59,7 @@ export default class Channel extends React.Component {
     }
   }
 
-  search(obj) {
-    this.setState({ channels: [], page: 1 });
-    this.setState(obj, () => {
-      MyActions.getList('channels/search', this.state.page, { q: this.state.query });
-    });
 
-  }
 
   loadMore() {
     if (this.state.query && this.state.query.length > 0) {

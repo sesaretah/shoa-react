@@ -151,5 +151,18 @@ export const dict = {
   'recent_posts': 'پست های اخیر',
   'profile_info':'اطلاعات فردی ',
   'experties': 'تخصص ها و مهارت ها',
-  'new_experties': 'افزودن تخصص'
+  'new_experties': 'افزودن تخصص',
+  'notifications' : 'آگاهسازی ها',
+  'enter_your_name':'نام خود را وارد کنید',
+  'enter_your_surename':'نام خانوادگی خود را وارد کنید',
+  'incomplete_data':'اطلاعات ناقص',
+  'alert':'هشدار',
+  'followers': 'دنبال کنندگان',
+  'followees':'دنبال شوندگان',
+  'verification': 'احراز هویت',
+  'verification_code':  'کد احراز',
+  'enter_verification_code':  'کد احراز را وارد کنید',
+  'faculty': 'دانشکده',
+  'enter_your_faculty': 'نام دانشکده خود را وارد کنید',
+  'new_post' : 'پست جدید'
 };

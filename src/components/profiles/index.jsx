@@ -12,8 +12,12 @@ export default class Layout extends React.Component {
     super();
     this.getList = this.getList.bind(this);
     this.search = this.search.bind(this);
+    this.interaction = this.interaction.bind(this);
+    
+    
     
     this.state = {
+      token: window.localStorage.getItem('token'),
       profiles: null,
       query: null,
     }
@@ -52,8 +56,13 @@ export default class Layout extends React.Component {
     }
   }
 
+  interaction(interaction_type, interactionable_id, interactionable_type, source_type=null, source_id=null){
+    var data = {interaction_type: interaction_type, interactionable_id: interactionable_id, interactionable_type: interactionable_type, source_type: source_type, source_id: source_id}
+    MyActions.setInstance('interactions', data, this.state.token);
+  }
+
   render() {
     const {profiles} = this.state;
-    return(<ProfileIndex profiles={profiles} search={this.search}/>)
+    return(<ProfileIndex profiles={profiles} interaction={this.interaction} search={this.search}/>)
   }
 }

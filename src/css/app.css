@@ -31,7 +31,7 @@
   --f7-theme-color: #009688;
   --f7-theme-color-rgb: 0, 150, 136;
   --f7-theme-color-shade: #006d63;
-  --f7-theme-color-tint: #00bfad;
+  --f7-theme-color-tint: #29d8c7;
 
   --f7-navbar-height: 40px;
   --f7-list-item-min-height: 40px;
@@ -378,3 +378,10 @@ li.media-item .item-media img {
   border-radius: 5px !important;
 }
 
+.bg-blonde {
+background-color: #fdfdda !important;
+}
+
+.ltr {
+  direction: ltr;;
+}

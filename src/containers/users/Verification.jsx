@@ -6,7 +6,7 @@ import crypto from 'crypto-js';
 const LoginForm = (props) => {
   return (
     <Page>
-      <Navbar title={dict.sign_up} >
+      <Navbar title={dict.verification} >
         <Link panelOpen="right">
           <Icon f7="bars"></Icon>
         </Link>
@@ -16,24 +16,13 @@ const LoginForm = (props) => {
         <CardContent>
           <List form>
             <ListInput
-              label={dict.email}
+              label={dict.verification_code}
               type="text"
-              autofocus={true}
-              placeholder={dict.enter_your_email}
-              value={props.email}
+              placeholder={dict.enter_verification_code}
               onInput={(e) => {
-                props.handleChange({ email: e.target.value })
+                props.handleChange({ verificationCode: e.target.value })
               }}
             />
-            {/*<ListInput
-              label={dict.password}
-              type="password"
-              placeholder={dict.enter_your_password}
-              value={props.password}
-              onInput={(e) => {
-                props.handleChange({ password: e.target.value })
-              }}
-            />*/}
           </List>
         </CardContent>
         <CardFooter>
