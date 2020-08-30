@@ -13,8 +13,8 @@ const LoginForm = (props) => {
       </Navbar>
       <Card>
         <CardHeader>{dict.login}</CardHeader>
-        <CardContent>
-          <List form>
+        <CardContent className='mh-auto'>
+          <List >
             <ListInput
               label={dict.email}
               type="text"
@@ -38,7 +38,9 @@ const LoginForm = (props) => {
         </CardContent>
         <CardFooter>
           <Link href="/sign_up/" animate={false} ignoreCache={true}>{dict.you_can_sign_up} </Link>
-          <Button className="col" fill onClick={props.submit}>{dict.login}</Button>
+          <Button fill className='fs-11 external f-color-black bg-teal' href="https://auth.ut.ac.ir:8443/cas/login?service=https%3A%2F%2Fsn.ut.ac.ir%2Fusers%2Fservice"  animate={false} ignoreCache={true}>{dict.cas} </Button>
+          <Link className="btn-notice"></Link>
+          <Button className="col btn" fill onClick={props.submit}>{dict.login}</Button>
         </CardFooter>
       </Card>
     </Page>

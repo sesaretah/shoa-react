@@ -12,7 +12,6 @@ class ModelStore extends EventEmitter {
 
   listModel(list){
     this.list = [];
-    console.log(list.data)
     this.klass = list.klass
     for (var i = 0, len = list.data.length; i < len; ++i) {
       this.list.push(list.data[i]);

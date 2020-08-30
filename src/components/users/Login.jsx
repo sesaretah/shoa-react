@@ -29,6 +29,7 @@ export default class extends React.Component {
     this.setInstance = this.setInstance.bind(this);
 
     this.state = {
+      token: window.localStorage.getItem('token'),
       email: '',
       password: '',
     };
@@ -42,9 +43,12 @@ export default class extends React.Component {
     ModelStore.removeListener("set_instance", this.setInstance);
   }
   componentDidMount(){
-    const self = this;
-    self.$$('input').focusin()
-    console.log(self.$$('input')[0])
+    if(this.$f7route.params['token']) {
+      MyActions.setInstance('users/validate_token', {}, this.$f7route.params['token']);
+    }
+    if(this.state.token && this.state.token.length > 10){
+      MyActions.setInstance('users/validate_token', {}, this.state.token);
+    }
   }
 
   submit(){
@@ -53,13 +57,15 @@ export default class extends React.Component {
   }
 
   setInstance(){
-    var user = ModelStore.getIntance();
-    if (user){
-     // window.localStorage.setItem('token', user.token);
+    var klass = ModelStore.getKlass()
+    if (klass === 'Login') {
+      this.$f7router.navigate('/verification/'+this.state.email);
     }
-    const self = this;
-    this.$f7router.navigate('/verification/');
-    window.location.reload()
+    if (klass === 'Validate') {
+      this.$f7router.navigate('/');
+      window.location.reload()
+    }
+    console.log(klass)
   }
 
 

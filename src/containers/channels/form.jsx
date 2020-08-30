@@ -18,7 +18,7 @@ const ChannelForm = (props) => {
             }}
             />
           <ListInput
-            label={dict.abstract}
+            label={dict.details}
             type="textarea"
             placeholder='...'
             value={props.content}

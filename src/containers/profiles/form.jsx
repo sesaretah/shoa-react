@@ -7,7 +7,7 @@ import ActualList from "../actuals/list";
 import ExpertiesList from "./experties";
 import ImageUploader from 'react-images-upload';
 const ProfileForm = (props) => {
-  if (props.name && props.metas) {
+  if (props.name && props.metas && props.editable) {
     return (
       <React.Fragment>
         <Card>

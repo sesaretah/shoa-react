@@ -30,6 +30,7 @@ export default class extends React.Component {
 
     this.state = {
       verificationCode: '',
+      email: '',
     };
   }
 
@@ -41,6 +42,10 @@ export default class extends React.Component {
     ModelStore.removeListener("set_instance", this.setInstance);
   }
 
+  componentDidMount(){
+    this.setState({email: this.$f7route.params['email']})
+  }
+
   submit(){
     var data = {verification_code: this.state.verificationCode}
     MyActions.setInstance('users/verify', data);
@@ -48,12 +53,21 @@ export default class extends React.Component {
 
   setInstance(){
     var user = ModelStore.getIntance();
-    if (user){
+    var klass = ModelStore.getKlass()
+    if (user && klass == 'Verify'){
       window.localStorage.setItem('token', user.token);
+      var last = window.localStorage.getItem('url')
+      if(last.length > 5){
+        //this.$f7router.navigate(last);
+        window.location.replace(last);
+        window.localStorage.setItem('url', '');
+        window.location.reload()
+      } else {
+        this.$f7router.navigate('/');
+        window.location.reload()
+      }
+      
     }
-    const self = this;
-    this.$f7router.navigate('/');
-    window.location.reload()
   }
 
 
@@ -62,9 +76,9 @@ export default class extends React.Component {
   }
 
   render() {
-    const {username, password} = this.state;
+    const {username, email} = this.state;
     return (
-      <VerificationForm submit={this.submit} handleChange={this.handleChangeValue}/>
+      <VerificationForm submit={this.submit} email={email} handleChange={this.handleChangeValue}/>
     )
   }
 

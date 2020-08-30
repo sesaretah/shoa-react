@@ -38,7 +38,7 @@ const PostForm = (props) => {
               type="text"
               placeholder='...'
               maxlength='65'
-              value={props.post.title}
+              value={props.title}
               onInput={(e) => {
                 props.handleChange({ title: e.target.value })
               }}

@@ -17,6 +17,8 @@ import { dict } from '../../Dict';
 import ModelStore from "../../stores/ModelStore";
 import * as MyActions from "../../actions/MyActions";
 import PostShow from "../../containers/posts/show";
+import crypto from 'crypto-js';
+import { loggedIn } from "../../components/users/loggedIn.js"
 
 
 export default class Layout extends Component {
@@ -25,13 +27,23 @@ export default class Layout extends Component {
     this.getInstance = this.getInstance.bind(this);
     this.interaction = this.interaction.bind(this);
     this.setInstance = this.setInstance.bind(this);
+    this.loggedIn = loggedIn.bind(this);
     this.handleChangeValue = this.handleChangeValue.bind(this);
     this.getList = this.getList.bind(this);
     this.submit = this.submit.bind(this);
     this.submitComment = this.submitComment.bind(this);
-    this.removeComment = this.removeComment.bind(this);
+    this.deleteComment = this.deleteComment.bind(this);
+    this.deleteCommentConfirm = this.deleteCommentConfirm.bind(this);
+    this.replyToComment = this.replyToComment.bind(this);  
+    this.removeReply = this.removeReply.bind(this);      
+    
     this.loadMore = this.loadMore.bind(this);
+    this.rating = this.rating.bind(this);
+    this.deletePost = this.deletePost.bind(this);
+    this.deletePostConfirm = this.deletePostConfirm.bind(this);
 
+    
+    
 
 
 
@@ -46,6 +58,9 @@ export default class Layout extends Component {
       commentContent: '',
       comments: null,
       token: window.localStorage.getItem('token'),
+      rnd: crypto.lib.WordArray.random(32),
+      replyTo: null,
+      deletable: false
 
     }
   }
@@ -66,9 +81,7 @@ export default class Layout extends Component {
   }
 
   componentDidMount() {
-    this.$$('.some-link').on('taphold', function (f7) {
-      f7.dialog.alert('Tap hold fired!');
-    });
+    this.loggedIn();
     MyActions.getInstance('posts', this.$f7route.params['postId'], this.state.token);
     MyActions.getList('channels/my', this.state.page, {}, this.state.token);
   }
@@ -80,8 +93,12 @@ export default class Layout extends Component {
       this.setState({
         post: post,
         id: post.id,
-        comments: post.comments
+        comments: post.comments,
+        deletable: post.deletable
       });
+    }
+    if(klass ==='PostDelete') {
+      this.$f7router.navigate('/posts/');
     }
   }
 
@@ -94,7 +111,6 @@ export default class Layout extends Component {
         channelId: channels[0].id
       });
     }
-    console.log(channels)
   }
 
   setInstance() {
@@ -104,9 +120,10 @@ export default class Layout extends Component {
       this.setState({
         post: post,
         comments: post.comments,
-        page: 1
+        page: 1,
       });
     }
+    this.$$('#cm-form-'+this.state.rnd).val('');
   }
 
   loadMore() {
@@ -136,6 +153,12 @@ export default class Layout extends Component {
     MyActions.setInstance('interactions', data, this.state.token);
   }
 
+  rating(value) {
+    console.log('value: ' ,value)
+    var data = { post_id: this.state.id, value: value }
+    MyActions.setInstance('ratings', data, this.state.token);
+  }
+
   submit() {
     var data = { post_id: this.state.id, channel_id: this.state.selectedChannel }
     MyActions.setInstance('shares', data, this.state.token);
@@ -143,24 +166,63 @@ export default class Layout extends Component {
     self.$f7.sheet.close('.demo-sheet')
   }
 
+
   submitComment() {
-    var data = { post_id: this.state.id, content: this.state.commentContent }
+    var data = {post_id: this.state.id, content: this.state.commentContent, reply_id: this.state.replyTo  }
     MyActions.setInstance('comments', data, this.state.token);
   }
 
-  removeComment(id) {
+
+  deleteCommentConfirm(id){
+    const self = this;
+    const app = self.$f7;
+    app.dialog.confirm(dict.are_you_sure, dict.alert, () => self.deleteComment(id))
+  }
+
+  deleteComment(id) {
     var data = { id: id }
     MyActions.removeInstance('comments', data, this.state.token, this.state.page);
   }
 
+  replyToComment(id) {
+    this.setState({ replyTo: id })
+    this.$$('#cm-form-'+this.state.rnd).focus()
+  }
+
+  removeReply() {
+    this.setState({ replyTo: null })
+  }
+
+  deletePost() {
+    var data = { id: this.state.id }
+    MyActions.removeInstance('posts', data, this.state.token, this.state.page);
+  }
+
+  deletePostConfirm(){
+    const self = this;
+    const app = self.$f7;
+    app.dialog.confirm(dict.are_you_sure, dict.alert, () => self.deletePost())
+  }
+
+
   render() {
-    const { post, sheetOpened, channels, comments } = this.state;
+    const { post, sheetOpened, channels, comments, rating, rnd, replyTo, deletable } = this.state;
     return (
       <Page>
         <Navbar title={dict.posts} backLink={dict.back} />
         <BlockTitle></BlockTitle>
         {this.fab()}
-        <PostShow post={post} comments={comments} channels={channels} submitComment={this.submitComment} removeComment={this.removeComment} submit={this.submit} interaction={this.interaction} handleChange={this.handleChangeValue} loadMore={this.loadMore} />
+        <PostShow 
+        post={post} comments={comments} rating={this.rating} rnd={rnd}
+        channels={channels} submitComment={this.submitComment} replyTo={replyTo}
+        deleteComment={this.deleteComment} submit={this.submit} 
+        deleteCommentConfirm={this.deleteCommentConfirm} replyToComment={this.replyToComment}
+        removeReply={this.removeReply} deletable={deletable}
+        interaction={this.interaction} handleChange={this.handleChangeValue} 
+        loadMore={this.loadMore} deletePost={this.deletePost}
+        deletePostConfirm={this.deletePostConfirm}
+        
+        />
       </Page>
     );
   }

@@ -20,11 +20,7 @@ const ProfileIndex = (props) => {
           ></Searchbar>
         </Subnavbar>
       </Navbar>
-      <BlockTitle></BlockTitle>
-      <Fab href="/profiles/new" target="#main-view" position="left-bottom" slot="fixed" color="deeporange">
-        <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
-        <Icon ios="f7:close" aurora="f7:close" md="material:close"></Icon>
-      </Fab>
+      
       <ProfileList profiles={props.profiles} interaction={props.interaction} />
 
     </Page>

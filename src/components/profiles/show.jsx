@@ -23,13 +23,16 @@ export default class Layout extends Component {
     super();
     this.getInstance = this.getInstance.bind(this);
     this.addTag = this.addTag.bind(this);
+    this.interaction = this.interaction.bind(this);
     
     this.state = {
+      token: window.localStorage.getItem('token'),
       profile: null,
       id: null,
       actuals: null,
       metas: null,
       channels: null,
+      editable: false
     }
   }
 
@@ -42,7 +45,7 @@ export default class Layout extends Component {
   }
 
   componentDidMount() {
-    MyActions.getInstance('profiles', this.$f7route.params['profileId']);
+    MyActions.getInstance('profiles', this.$f7route.params['profileId'], this.state.token);
   }
 
   getInstance() {
@@ -55,12 +58,13 @@ export default class Layout extends Component {
         actuals: profile.actuals,
         metas: profile.metas,
         channels: profile.channels,
+        editable: profile.editable,
       });
     }
   }
 
   fab() {
-    if (this.state.profile) {
+    if (this.state.profile && this.state.editable) {
       return (
         <Fab href={"/profiles/" + this.state.profile.id + "/edit"} target="#main-view" position="left-bottom" slot="fixed" color="lime">
           <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
@@ -74,18 +78,27 @@ export default class Layout extends Component {
     console.log('hey');
   }
 
+  interaction(interaction_type, interactionable_id, interactionable_type, source_type = null, source_id = null) {
+    var data = { interaction_type: interaction_type, interactionable_id: interactionable_id, interactionable_type: interactionable_type, source_type: source_type, source_id: source_id }
+    MyActions.setInstance('interactions', data, this.state.token);
+  }
+
   render() {
-    const { profile, actuals, metas, channels } = this.state;
+    const { profile, actuals, metas, channels, editable } = this.state;
     return (
       <Page>
-        <Navbar title={dict.profiles} backLink={dict.back} />
+        <Navbar title={dict.profiles} backLinkForce={true} backLink={dict.back} />
         <Toolbar tabbar bottom>
           <Link tabLink="#tab-1" tabLinkActive><i className="va ml-5 fa fa-user-circle"></i></Link>
           <Link tabLink="#tab-2"><i className="va ml-5 fa fa-bar-chart"></i></Link>
           <Link tabLink="#tab-3"><i className="va ml-5 fa fa-list"></i></Link>
         </Toolbar>
         {this.fab()}
-        <ProfileShow profile={profile} actuals={actuals} channels={channels} metas={metas} addTag={this.addTag}/>
+        <ProfileShow 
+          profile={profile} actuals={actuals} channels={channels} 
+          metas={metas} addTag={this.addTag} interaction={this.interaction}
+          editable={editable}
+          />
 
       </Page>
     );

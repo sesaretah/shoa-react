@@ -6,19 +6,55 @@ import 'moment-timezone';
 import 'moment/locale/fa';
 
 const CommentList = (props) => {
+    console.log(props)
     var items = []
+    function editLink(comment) {
+        var result = []
+        if (comment.editable) {
+            result.push(
+                <Link onClick={() => props.deleteCommentConfirm(comment.id)}>
+                    <i className="va ml-5 fa fa-trash"></i>
+                </Link>
+            )
+        }
+        result.push(
+            <Link onClick={() => props.replyToComment(comment.id)}>
+                <i className="va ml-5 fa fa-reply"></i>
+            </Link>
+        )
+        return (result)
+    }
+
+    function title(comment){
+        var result = [<span>{comment.profile.fullname}: </span>]
+        if(comment.reply_to){
+            result.push(<span className='fs-10 f-color-gray'>{dict.in_reply_to} {comment.reply_to}</span>)
+        }
+        return(result)
+    }
     if (props.comments) {
 
         for (let i = 0; i < props.comments.length; i++) {
-            var time = <React.Fragment><Link onClick={() => props.removeComment(props.comments[i].id)}><i className="va ml-5 fa fa-trash"></i></Link><Moment locale="fa" fromNow ago>{props.comments[i].created_at}</Moment>{dict.ago}</React.Fragment>
+            var date = new Date(new window.ODate(props.comments[i].created_at))
+            var time =
+                <React.Fragment>
+                    {editLink(props.comments[i])}
+                    <Moment locale="fa" fromNow ago>{date}</Moment>
+                    {dict.ago}
+                </React.Fragment>
             items.push(
                 <ListItem
-                    className='some-link'
+                    key={'comment' + props.comments[i].id}
+                    className='fs-10'
+                    id={'cm-'+props.comments[i].id}
                     text={time}
+                    title={title(props.comments[i])}
                     subtitle={props.comments[i].content}
                 >
-                    <img slot="media" src={props.comments[i].profile.avatar} width="44" />
+                    <img slot="media" src={props.comments[i].profile.avatar} width="44" height="44" />
                 </ListItem>
+
+
 
             )
         }
@@ -38,11 +74,12 @@ const CommentList = (props) => {
                     </Col>
                     <Col></Col>
                 </Row>
+                <BlockTitle></BlockTitle>
             </React.Fragment>
         )
     }
     else {
-        return (null)
+        return (<BlockTitle></BlockTitle>)
     }
 }
 export default CommentList;

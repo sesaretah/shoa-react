@@ -9,6 +9,7 @@ import { dict} from '../../Dict';
 import ModelStore from "../../stores/ModelStore";
 import * as MyActions from "../../actions/MyActions";
 import ChannelShow from "../../containers/channels/show"
+import { loggedIn } from "../../components/users/loggedIn.js"
 
 export default class Layout extends Component {
   constructor() {
@@ -16,7 +17,7 @@ export default class Layout extends Component {
     this.getInstance = this.getInstance.bind(this);
     this.interaction = this.interaction.bind(this);
     this.setInstance = this.setInstance.bind(this);
-
+    this.loggedIn = loggedIn.bind(this);
 
     this.state = {
       channel: null,
@@ -37,6 +38,7 @@ export default class Layout extends Component {
   }
 
   componentDidMount(){
+    this.loggedIn();
     MyActions.getInstance('channels', this.$f7route.params['channelId'], this.state.token);
   }
 
@@ -53,7 +55,8 @@ export default class Layout extends Component {
 
   setInstance(){
     var channel = ModelStore.getIntance()
-    if(channel){
+    var klass = ModelStore.getKlass()
+    if(channel && klass === 'Channel'){
       this.setState({
         channel: channel,
       });
@@ -63,7 +66,7 @@ export default class Layout extends Component {
 
 
   fab(){
-    if (this.state.channel){
+    if (this.state.channel && this.state.channel.editable){
       return(
         <Fab href={"/channels/"+this.state.channel.id+"/edit"} target="#main-view"  position="left-bottom" slot="fixed" color="lime">
           <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>

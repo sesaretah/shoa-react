@@ -57,9 +57,21 @@ export default class PostUpdate extends Component {
     ModelStore.removeListener("got_list", this.getList);
   }
 
-  submit(){
-    var data = {id: this.state.id, title: this.state.title, draft:convertToRaw(this.state.editorState.getCurrentContent())}
-    MyActions.updateInstance('posts', data, this.state.token);
+  //submit(){
+  //  var data = {id: this.state.id, title: this.state.title, draft:convertToRaw(this.state.editorState.getCurrentContent())}
+  //  MyActions.updateInstance('posts', data, this.state.token);
+  //}
+
+  submit() {
+    const blocks = convertToRaw(this.state.editorState.getCurrentContent()).blocks;
+    const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
+    var data = {id: this.state.id, title: this.state.title, content: value, channel_id: this.state.channelId, draft: convertToRaw(this.state.editorState.getCurrentContent()) }
+    if (this.state.title) {
+      MyActions.updateInstance('posts', data, this.state.token);
+    } else {
+      const self = this;
+      self.$f7.dialog.alert(dict.incomplete_data, dict.alert);
+    }
   }
 
   componentDidMount(){
@@ -112,12 +124,11 @@ export default class PostUpdate extends Component {
 
 
   render() {
-    const { post, editorState} = this.state;
+    const { post, title,editorState, channels } = this.state;
     return (
       <Page>
-        <Navbar title="Form" backLink={dict.back} />
-        <BlockTitle>{dict.workflow_form}</BlockTitle>
-        <PostForm post={post}  editorState={editorState} onEditorStateChange={this.onEditorStateChange} submit={this.submit}  handleChange={this.handleChangeValue} uploadImageCallBack={this.uploadImageCallBack}/>
+        <Navbar title={dict.post_form} />
+        <PostForm post={post} title={title} channels={channels} editorState={editorState} onEditorStateChange={this.onEditorStateChange} submit={this.submit} handleChange={this.handleChangeValue} uploadImageCallBack={this.uploadImageCallBack} />
       </Page>
     );
   }

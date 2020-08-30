@@ -15,6 +15,7 @@ export default class Channel extends React.Component {
     this.loggedIn = loggedIn.bind(this);
     this.interaction = this.interaction.bind(this);
     this.setInstance = this.setInstance.bind(this);
+    this.getInstance = this.getInstance.bind(this);
     this.search = this.search.bind(this);
     this.loadMore = this.loadMore.bind(this);
 
@@ -23,16 +24,22 @@ export default class Channel extends React.Component {
       channels: [],
       query: null,
       page: 1,
+      ability: null,
+      profileId: null,
+      allowInfinite: true,
+      showPreloader: true,
     }
   }
   componentWillMount() {
     ModelStore.on("got_list", this.getList);
     ModelStore.on("set_instance", this.setInstance);
+    ModelStore.on("got_instance", this.getInstance);
   }
 
   componentWillUnmount() {
     ModelStore.removeListener("got_list", this.getList);
     ModelStore.removeListener("set_instance", this.setInstance);
+    ModelStore.removeListener("got_instance", this.getInstance);
   }
 
   componentDidMount(){
@@ -40,21 +47,36 @@ export default class Channel extends React.Component {
     this.loadData();
   }
 
+
+  getInstance() {
+    var user = ModelStore.getIntance()
+    var klass = ModelStore.getKlass()
+    if (user && klass === 'UserRole') {
+      this.setState({
+        ability: user.the_ability,
+        profileId: user.profile_id
+      });
+    }
+
+  }
+
   loadData(){
     MyActions.getList('channels', this.state.page, {} , this.state.token);
+    MyActions.getInstance('users', 'role', this.state.token);
   }
 
   search(obj) {
     this.setState({ channels: [], page: 1 });
     this.setState(obj, () => {
-      MyActions.getList('channels/search', this.state.page, { q: this.state.query });
+      MyActions.getList('channels/search', this.state.page, { q: this.state.query }, this.state.token);
     });
   }
 
 
   setInstance(){
     var channel = ModelStore.getIntance()
-    if(channel){
+    var klass = ModelStore.getKlass()
+    if(channel && klass === 'Channel') {
       this.setState({channels: this.state.channels.map(el => (el.id === channel.id ? Object.assign({}, el, channel) : el))});
     }
   }
@@ -70,6 +92,7 @@ export default class Channel extends React.Component {
       this.setState({ page: this.state.page + 1 }, () => {
         MyActions.getList('channels', this.state.page, {}, this.state.token);
       });
+      this.setState({ showPreloader: false });
     }
 
   }
@@ -77,11 +100,17 @@ export default class Channel extends React.Component {
   getList() {
     var channels = ModelStore.getList()
     var klass = ModelStore.getKlass()
+    if (channels.length > 0 && klass === 'ChannelSearch') {
+      this.setState({
+        channels: channels,
+      });
+    }
     if (channels.length > 0 && klass === 'Channel') {
       this.setState({
         channels: this.state.channels.concat(channels),
       });
     }
+    this.setState({ showPreloader: true });
   }
 
   interaction(interaction_type, interactionable_id, interactionable_type, source_type=null, source_id=null){
@@ -90,7 +119,12 @@ export default class Channel extends React.Component {
   }
 
   render() {
-    const {channels} = this.state;
-    return(<ChannelIndex interaction={this.interaction} search={this.search} loadMore={this.loadMore} channels={channels}/>)
+    const {channels, ability, profileId, showPreloader} = this.state;
+    return(
+      <ChannelIndex 
+        interaction={this.interaction} search={this.search} 
+        loadMore={this.loadMore} channels={channels}
+        ability={ability} showPreloader={showPreloader}
+        />)
   }
 }

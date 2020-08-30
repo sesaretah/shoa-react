@@ -52,12 +52,12 @@ const ProfileShow = (props) => {
                   <ExpertiesList experties={props.profile.experties} />
                 </CardContent>
               </Card>
-              <Followers followers={props.profile.followers}/>
+              <Followers followers={props.profile.followers} profile={props.profile}/>
             </Col>
 
             <Col width="100" tabletWidth="50">
             <ChannelCompactList channels={props.channels} />
-            <Followees followees={props.profile.followees}/>
+            <Followees followees={props.profile.followees} profile={props.profile}/>
             </Col>
           </Row>
 

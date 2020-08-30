@@ -13,8 +13,18 @@ const LoginForm = (props) => {
       </Navbar>
       <Card>
         <CardHeader>{dict.login}</CardHeader>
-        <CardContent>
-          <List form>
+        <CardContent >
+          <List >
+          <ListInput
+              label={dict.email}
+              type="text"
+              autofocus={true}
+              placeholder={dict.enter_your_email}
+              value={props.email}
+              onInput={(e) => {
+                props.handleChange({ email: e.target.value })
+              }}
+            />
             <ListInput
               label={dict.verification_code}
               type="text"
@@ -27,7 +37,8 @@ const LoginForm = (props) => {
         </CardContent>
         <CardFooter>
           <Link href="/sign_up/" animate={false} ignoreCache={true}>{dict.you_can_sign_up} </Link>
-          <Button className="col" fill onClick={props.submit}>{dict.login}</Button>
+          <Link className="btn-notice"></Link>
+          <Button className="col btn" fill onClick={props.submit}>{dict.login}</Button>
         </CardFooter>
       </Card>
     </Page>

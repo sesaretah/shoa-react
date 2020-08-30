@@ -11,16 +11,16 @@ const InteractionMenu = (props) => {
       <Actions id={"actions-two-groups-"+props.model.id}>
         <ActionsGroup>
           <ActionsLabel>{dict.social_acts}</ActionsLabel>
-          <ActionsButton onClick={props.model.bookmarked ? '': () => props.interaction('Bookmark', props.model.id, props.klass, props.sourceType, props.sourceId)}><i className="va ml-5 fa fa-bookmark"></i>{dict.bookmark} ({props.model.bookmarks})</ActionsButton>
-          <ActionsButton onClick={props.model.liked ? '':() => props.interaction('Like', props.model.id, props.klass, props.sourceType, props.sourceId)}><i className="va ml-5 fa fa-heart"></i>{dict.like} ({props.model.likes})</ActionsButton>
-          <ActionsButton onClick={props.model.followed ? '':() => props.interaction('Follow', props.model.id, props.klass, props.sourceType, props.sourceId)}><i className="va ml-5 fa fa-link"></i>{dict.follow} ({props.model.follows})</ActionsButton>
+          <ActionsButton onClick={() => props.interaction('Bookmark', props.model.id, props.klass, props.sourceType, props.sourceId)}><i className="va ml-5 fa fa-bookmark"></i>{dict.bookmark} ({props.model.bookmarks})</ActionsButton>
+          <ActionsButton onClick={() => props.interaction('Like', props.model.id, props.klass, props.sourceType, props.sourceId)}><i className="va ml-5 fa fa-heart"></i>{dict.like} ({props.model.likes})</ActionsButton>
+          <ActionsButton onClick={() => props.interaction('Follow', props.model.id, props.klass, props.sourceType, props.sourceId)}><i className="va ml-5 fa fa-link"></i>{dict.follow} ({props.model.follows})</ActionsButton>
         </ActionsGroup>
         <ActionsGroup>
           <ActionsButton color="red">{dict.cancel}</ActionsButton>
         </ActionsGroup>
       </Actions>
       
-      <Button className="col"  href={false} actionsOpen={"#actions-two-groups-"+props.model.id}><i className="va fa fa-users"></i></Button>
+      <Button tooltip={dict.social_acts} className="col"  href={false} actionsOpen={"#actions-two-groups-"+props.model.id}><i className="va fa fa-users"></i></Button>
       </React.Fragment>
     )
   } else {

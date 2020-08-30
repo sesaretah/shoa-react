@@ -41,6 +41,7 @@ export default class ProfileCreate extends Component {
       id: null, 
       pictures: [],
       avatar: null,
+      editable: false,
     }
   }
 
@@ -65,7 +66,7 @@ export default class ProfileCreate extends Component {
 
   loadData(){
     if (this.$f7route.params['profileId']) {
-      MyActions.getInstance('profiles', this.$f7route.params['profileId']);
+      MyActions.getInstance('profiles', this.$f7route.params['profileId'], this.state.token);
     }
   }
 
@@ -133,6 +134,7 @@ export default class ProfileCreate extends Component {
         name: profile.name,
         surename : profile.surename,
         avatar: profile.avatar,
+        editable: profile.editable,
         experties: profile.experties
       });
     }
@@ -156,12 +158,19 @@ export default class ProfileCreate extends Component {
 
 
   render() {
-    const {name, surename, avatar,metas, actuals, experties} = this.state;
+    const {name, surename, avatar,metas, actuals, experties, editable} = this.state;
     return (
       <Page>
         <Navbar title={dict.profile_form} backLink={dict.back} />
         <BlockTitle>{dict.profile_form}</BlockTitle>
-        <ProfileForm name={name} avatar={avatar} surename={surename} metas={metas} experties={experties} onDrop={this.onDrop} removeActual={this.removeActual} submitFields={this.submitFields} submit={this.submit} editing={true} handleChangeValueFields={this.handleChangeValueFields} handleChange={this.handleChangeValue} submitExperties={this.submitExperties} removeExperties={this.removeExperties}/>
+        <ProfileForm 
+          name={name} avatar={avatar} surename={surename} 
+          metas={metas} experties={experties} onDrop={this.onDrop} 
+          removeActual={this.removeActual} submitFields={this.submitFields} 
+          submit={this.submit} editing={true} 
+          handleChangeValueFields={this.handleChangeValueFields} 
+          handleChange={this.handleChangeValue} submitExperties={this.submitExperties} 
+          removeExperties={this.removeExperties} editable={editable}/>
       </Page>
     );
   }

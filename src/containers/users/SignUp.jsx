@@ -14,7 +14,7 @@ const SignUpForm = (props) => {
       <Card>
         <CardHeader>{dict.sign_up}</CardHeader>
         <CardContent>
-          <List form>
+          <List >
             <ListInput
               label={dict.firstname + ' *'}
               placeholder={dict.enter_your_name}
@@ -35,16 +35,6 @@ const SignUpForm = (props) => {
               }}
             />
 
-
-            <ListInput
-              label={dict.faculty}
-              placeholder={dict.enter_your_faculty}
-              type="text"
-              name={crypto.lib.WordArray.random(32)}
-              onInput={(e) => {
-                props.handleChange({ faculty: e.target.value })
-              }}
-            />
 
             <ListInput
               label={' * ' + dict.email}
@@ -82,8 +72,9 @@ const SignUpForm = (props) => {
           </List>
         </CardContent>
         <CardFooter>
-          <Link href="/login/" animate={false} ignoreCache={true}>{dict.if_registered}{'\u00A0'}{dict.you_can_login} </Link>
-          <Button className="col" fill onClick={props.submit}>{dict.sign_up}</Button>
+          <Link href="/login/">{dict.if_registered}{'\u00A0'}{dict.you_can_login} </Link>
+          <Link className="btn-notice"></Link>
+          <Button className="col btn" fill onClick={props.submit}>{dict.sign_up}</Button>
         </CardFooter>
       </Card>
     </Page>

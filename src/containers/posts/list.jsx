@@ -18,7 +18,7 @@ const PostList = (props) => {
                     <div className="demo-facebook-profile ">
                       <Link className="gray-color" href={'/profiles/' + post.profile.id}>{post.profile.fullname.substring(0, 40)}</Link>
                     </div>
-                    <Link tooltip={dict.view} className="gray-color" href={'/posts/' + post.id}>{post.title.substring(0, 15) + '..'}</Link></div>
+                    <Link tooltip={post.title} className="gray-color" href={'/posts/' + post.id}>{post.title.substring(0, 15) + '..'}</Link></div>
                   <div className="demo-facebook-date">
                     <InteractionMenu model={post} klass='Post' interaction={props.interaction} sourceType={props.sourceType} sourceId={props.sourceId} />
                   </div>
@@ -35,15 +35,6 @@ const PostList = (props) => {
               </Card>
             </Col>
           )}
-        </Row>
-        <Row noGap>
-          <Col></Col>
-          <Col className='center mb-20'>
-          <a className="gray-color" onClick={() => props.loadMore()}>
-            {dict.more}
-          </a>
-          </Col>
-          <Col></Col>
         </Row>
       </React.Fragment>
     )
